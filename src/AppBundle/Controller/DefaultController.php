@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\State\AppState;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,85 +15,80 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request )
     {
-
-        $appState = new AppState();
-
-        $em = $this->get('doctrine.orm.default_entity_manager');
-        $apartments = $em->getRepository('AppBundle:Apartment')->findByLimit(3);
-
-        $appState->setApartments($apartments);
-        $appState->setFetchMore(true);
-
-        return $this->render('default/index.html.twig', [
-            'appstate' => $appState,
-            'appstate_serialized' => $appState->jsonSerialize()
-        ]);
+      return $this->redirectToRoute('filtered', array(
+          'category' => 'hot'));
     }
 
-
     /**
-     * @Route("/limit/{limit}", name="limited")
+     * @Route("/category/{category}/{count}", name="filtered")
      */
-    public function limitedAction(Request $request, int $limit = 3 )
+    public function filteredAction(Request $request, $category,$count = 0 )
     {
+      //Some validation for grant that the category is valid. 
+      if ($count < 0){
+        $count = 0;
+      }
+      $json = "https://www.reddit.com/".$category.".json?count=".$count;
+      $jsonfile = file_get_contents($json);
 
-        $appState = new AppState();
-
-        $em = $this->get('doctrine.orm.default_entity_manager');
-        $apartments = $em->getRepository('AppBundle:Apartment')->findByLimit($limit);
-
-        $appState->setApartments($apartments);
-
-        return $this->render('default/index.html.twig', [
-            'appstate' => $appState,
-            'appstate_serialized' => $appState->jsonSerialize()
+      //Validation for grant that jsonfile is valid 
+      return $this->render('default/index.html.twig', [
+            'category' => json_encode(array('category' =>$category)),
+            'feeds' => $jsonfile,
         ]);
     }
 
     /**
-     * @Route("/country/{country}", name="filtered")
+     * @Route("/feeds", name="loadFeeds")
      */
-    public function filteredAction(Request $request, $country=false )
+    public function loadFeedsAction(Request $request)
     {
+      $category = $request->query->get('category') ? $request->query->get('category') : "hot";
+      $count = $request->query->get('count') ? $request->query->get('count') : 25;
+      $after = $request->query->get('after') ? $request->query->get('after') : null;
+      $before = $request->query->get('before') ? $request->query->get('before') : null;
 
-        $appState = new AppState();
+      //Some validation for grant that the category is valid. 
+      if ($count < 0){
+        $count = 25;
+      }
 
-        $em = $this->get('doctrine.orm.default_entity_manager');
-        $apartments = $em->getRepository('AppBundle:Apartment')->findByCountry($country);
+      $json = "https://www.reddit.com/".$category.".json?count=".$count;
+      if($after != null){
+        $json .= "&after=".$after;
+      } 
+      else if ($before != null){
+        $json .="&before=".$before;
+      }
 
-        $appState->setSelectedCountry($country);
-        $appState->setSortBy($country);
-        $appState->setApartments($apartments);
-
-        return $this->render('default/index.html.twig', [
-            'appstate' => $appState,
-            'appstate_serialized' => $appState->jsonSerialize()
-        ]);
+      $jsonfile = file_get_contents($json);
+      $response = new JsonResponse();
+      $arrayJson = [
+        'category' => array('category' =>$category),
+        'feeds' => json_decode($jsonfile),
+      ];
+      $response->setContent(json_encode($arrayJson));
+      return $response;
     }
 
-
     /**
-     * @Route("/api", name="api")
+     * @Route("/search", name="search")
      */
-    public function apiApartmentsAction(Request $request)
+    public function searchAction(Request $request)
     {
+      $query = $request->query->get('q') ? $request->query->get('q') : "";
+      $restrict_sr = $request->query->get('restrict_sr') ? $request->query->get('restrict_sr') : "";
+      $sort = $request->query->get('sort') ? $request->query->get('sort') : "relevance";
+      $t = $request->query->get('t') ? $request->query->get('t') : "all";
 
-        $appState = new AppState();
-
-        $em = $this->get('doctrine.orm.default_entity_manager');
-        $apartments = $em->getRepository('AppBundle:Apartment')->getRandom(10);
-
-        $appState->setApartments($apartments);
-
-        $response = new JsonResponse();
-
-        sleep(mt_rand(0,2));
-
-        $response->setContent($appState->jsonSerialize());
-
+      $json = "https://www.reddit.com/search.json?q=".$query."&restrict_sr=".$restrict_sr."&sort=".$sort."&t=".$t;
+      $jsonfile = file_get_contents($json);
+      $response = new JsonResponse();
+      $arrayJson = [
+        'category' => array('category' =>"hot"),
+        'feeds' => json_decode($jsonfile),
+      ];
+      $response->setContent(json_encode($arrayJson));
         return $response;
-
     }
-
-
 }

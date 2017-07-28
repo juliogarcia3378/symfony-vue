@@ -1,16 +1,60 @@
-
-.column-twig {
+  td,th {
+    padding: 1.2rem 1.5rem!important;
+  }
+  .column-twig {
     padding: 3em;
-}
+  }
 
-.column-twig {
+  .column-twig {
     background-color: #f0f0f0;
-}
+  }
 
-.column-vue {
+  .column-vue {
     background: #c4e3f3;
-}
+  }
 
-.column-react {
+  .column-react {
     background-color: #F5DEB3;
-}
+  }
+  .author {
+    font-size: 11px!important;
+  }
+  .default_thumbnail{
+    width: 70px;
+    height: 50px;
+    background-image: url(https://www.redditstatic.com/sprite-reddit.6Om8v6KMv28.png);
+    background-position: 0px -229px;
+    background-repeat: no-repeat;
+    background-size: 70px 837px;
+  }
+
+  ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+    font-size: 17px;
+  }
+
+  /* Display list items side by side */
+  ul.breadcrumb li {
+    display: inline;
+  }
+
+  /* Add a slash symbol (/) before/behind each list item */
+  ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+  }
+
+  /* Add a color to all links inside the list */
+  ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+  }
+
+  /* Add a color on mouse-over */
+  ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+  }

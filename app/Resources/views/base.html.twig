@@ -1,50 +1,81 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-
-    <title>{% block title %}Apartments demo{% endblock %}</title>
-
-    <link href="{{ asset('/bundles/app/css/milligram.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('/bundles/app/css/app.css') }}" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>{% block title %}Reddit demo{% endblock %}</title>
+  <link href="{{ asset('/bundles/app/css/milligram.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('/bundles/app/css/app.css') }}" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
+  <header class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Reddit_logo_and_wordmark.svg/1280px-Reddit_logo_and_wordmark.svg.png" width="100px"></a>
+        </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <form class="navbar-form navbar-right">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search" id="search-box">
+          </div>
+          <a href="#" class="btn btn-default" id="search" v-on:click="load">Submit</a>
+        </form>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
-<header class="container">
     <p>
-        <a href="{{ path('homepage') }}" class="button">Home</a>
-        <a href="{{ path('limited', {limit: 10}) }}" class="button">List 10</a>
-        <a href="{{ path('limited', {limit: 100}) }}" class="button">List 100</a>
-        <a href="{{ path('limited', {limit: 300}) }}" class="button">List 300</a>
-        <a href="{{ path('filtered', {country: 'Finland'}) }}" class="button">List apartments in Finland</a>
-        <a href="{{ path('filtered', {country: 'Japan'}) }}" class="button">List apartments in Japan</a>
+      <a href="{{ path('filtered', {category: 'hot'}) }}" class="button">Hots </a>
+      <a href="{{ path('filtered', {category: 'new'}) }}" class="button">News</a>
+      <a href="{{ path('filtered', {category: 'rising'}) }}" class="button">Rising</a>
+      <a href="{{ path('filtered', {category: 'controversial'}) }}" class="button">Controversial</a>
+      <a href="{{ path('filtered', {category: 'top'}) }}" class="button">Top</a>
+      <a href="{{ path('filtered', {category: 'ads'}) }}" class="button">Ads</a>
     </p>
 
-</header>
+    <ol class="breadcrumb">
+      <li>Home</li>
+      <li>  </li>
+      <li id="bc-vue-app"></li>
+    </ol>
+  </header>
 
+  
 {% block body %}
 {% endblock %}
 
+<div class="container">
+  </br>
+    <p>
+      <a class="button loadTrigger" id="paginator-previous-page" v-on:click="load" >Previous</a>
+      <a class="button loadTrigger" id="paginator-next-page" v-on:click="load">Next</a>
+    </p>
+</div>
 <script type="text/javascript">
-    var initialAppState = {{ appstate_serialized|raw }};
+    var initialFeedsState = {{ feeds |raw }};
+    var category = {{category | raw}};
+    var paginator = {};
+    paginator.initial = {{feeds|raw}}.data.after; 
+    paginator.after = {{feeds|raw}}.data.after;
+    paginator.before = {{feeds|raw}}.data.before;
+    paginator.page = 1;
+    initialFeedsState.paginator = paginator;
 </script>
 
 <!-- http utility -->
 <script src="{{ asset('bundles/app/js/axios.min.js') }}"></script>
 
 <!-- typescript -->
-<script src="{{ asset('bundles/app/js/typescript/dist/app.js') }}"></script>
-<script>initTsApp();</script>
 
 <!-- vue -->
 <script src="{{ asset('bundles/app/js/vue/vue.js') }}"></script>
 <script src="{{ asset('bundles/app/js/vue/app.js') }}"></script>
 
-<!-- react -->
-<script>!function(e){function t(n){if(r[n])return r[n].exports;var a=r[n]={exports:{},id:n,loaded:!1};return e[n].call(a.exports,a,a.exports,t),a.loaded=!0,a.exports}var n=window.webpackJsonp;window.webpackJsonp=function(p,o){for(var l,c,s=0,i=[];s<p.length;s++)c=p[s],a[c]&&i.push.apply(i,a[c]),a[c]=0;for(l in o)e[l]=o[l];for(n&&n(p,o);i.length;)i.shift().call(null,t);if(o[0])return r[0]=0,t(0)};var r={},a={1:0};t.e=function(e,n){if(0===a[e])return n.call(null,t);if(void 0!==a[e])a[e].push(n);else{a[e]=[n];var r=document.getElementsByTagName("head")[0],p=document.createElement("script");p.type="text/javascript",p.charset="utf-8",p.async=!0,p.src=t.p+""+({0:"app"}[e]||e)+"."+{0:"16bd7a28"}[e]+".js",r.appendChild(p)}},t.m=e,t.c=r,t.p="/"}([]);</script>
-<script src="{{ asset('bundles/app/js/react/dist/app.2432197f.js') }}"></script></body>
+</body>
 
 </body>
 </html>

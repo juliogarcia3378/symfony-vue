@@ -59,6 +59,3 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-easy_admin:
-    entities:
-        - AppBundle\Entity\Apartment
