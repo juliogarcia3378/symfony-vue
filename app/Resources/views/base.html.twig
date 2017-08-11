@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>{% block title %}Reddit demo{% endblock %}</title>
+  <title>{% block title %}Example API demo{% endblock %}</title>
   <link href="{{ asset('/bundles/app/css/milligram.min.css') }}" rel="stylesheet">
   <link href="{{ asset('/bundles/app/css/app.css') }}" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -14,35 +14,14 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Reddit_logo_and_wordmark.svg/1280px-Reddit_logo_and_wordmark.svg.png" width="100px"></a>
+          <a class="navbar-brand" href="/">Homepage</a>
+  
+
         </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <form class="navbar-form navbar-right">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search" id="search-box">
-          </div>
-          <a href="#" class="btn btn-default" id="search" v-on:click="load">Submit</a>
-        </form>
-        </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
-
-    <p>
-      <a href="{{ path('filtered', {category: 'hot'}) }}" class="button">Hots </a>
-      <a href="{{ path('filtered', {category: 'new'}) }}" class="button">News</a>
-      <a href="{{ path('filtered', {category: 'rising'}) }}" class="button">Rising</a>
-      <a href="{{ path('filtered', {category: 'controversial'}) }}" class="button">Controversial</a>
-      <a href="{{ path('filtered', {category: 'top'}) }}" class="button">Top</a>
-      <a href="{{ path('filtered', {category: 'ads'}) }}" class="button">Ads</a>
-    </p>
-
-    <ol class="breadcrumb">
-      <li>Home</li>
-      <li>  </li>
-      <li id="bc-vue-app"></li>
-    </ol>
-  </header>
 
   
 {% block body %}
@@ -51,19 +30,12 @@
 <div class="container">
   </br>
     <p>
-      <a class="button loadTrigger" id="paginator-previous-page" v-on:click="load" >Previous</a>
-      <a class="button loadTrigger" id="paginator-next-page" v-on:click="load">Next</a>
+      {% block navigation %}
+      {% endblock %}
     </p>
 </div>
 <script type="text/javascript">
-    var initialFeedsState = {{ feeds |raw }};
-    var category = {{category | raw}};
-    var paginator = {};
-    paginator.initial = {{feeds|raw}}.data.after; 
-    paginator.after = {{feeds|raw}}.data.after;
-    paginator.before = {{feeds|raw}}.data.before;
-    paginator.page = 1;
-    initialFeedsState.paginator = paginator;
+    var gamestats = {{ gamestats |raw }};
 </script>
 
 <!-- http utility -->

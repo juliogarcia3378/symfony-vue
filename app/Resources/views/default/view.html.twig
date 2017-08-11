@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <main class="container">
+        <div class="row">
+            <div class="column column-vue">
+                <div id="vue-app"></div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block navigation %}
+	<a class="button " id="refresh-page" v-on:click="load">Refresh</a>
+{% endblock %}
